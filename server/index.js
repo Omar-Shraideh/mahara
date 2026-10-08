@@ -166,7 +166,7 @@ async function start() {
   app.listen(PORT, "0.0.0.0", function () {
     var st = ai.status();
     console.log("Mahara is running on port " + PORT + (DEV ? " (development)" : ""));
-    console.log("AI: " + (st.mode === "claude" ? "Claude (" + st.models.fast + " for tasks, " + st.models.grader + " for grading)" : "built-in rules (set ANTHROPIC_API_KEY to use Claude)"));
+    console.log("AI: " + (st.mode === "claude" ? "Claude via " + (st.provider === "replit" ? "Replit AI Integrations" : "your Anthropic key") + " (" + st.models.fast + " for tasks, " + st.models.grader + " for grading)" : "built-in rules (connect Replit AI Integrations or set ANTHROPIC_API_KEY to use Claude)"));
   });
 }
 start();

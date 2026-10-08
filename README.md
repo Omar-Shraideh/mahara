@@ -45,7 +45,7 @@ npm test           # starts a throwaway server and runs one full session through
 1. Create a new Repl from the **Node.js** template.
 2. Drag `mahara-replit.zip` into the Files panel.
 3. In the **Shell** tab run: `unzip -o mahara-replit.zip -d . && rm mahara-replit.zip`
-4. Optional but recommended for judging: add `ANTHROPIC_API_KEY` under **Tools → Secrets**. ENVIRONMENT.md explains how.
+4. Connect the AI: ask the Replit Agent to "set up the Anthropic (Replit managed) AI integration" (billed to Replit credits, no key needed), or add your own `ANTHROPIC_API_KEY` in Secrets. See ENVIRONMENT.md.
 5. Press **Run**. The first run installs packages and builds, which takes about a minute. After that the preview opens on the start page.
 
 `.replit` runs `npm run replit` (install, build, start) and maps port 3000 to the public URL. If the build ever fails, the app still starts from the prebuilt `dist/` folder included in the zip.
@@ -58,8 +58,9 @@ None are required. See [ENVIRONMENT.md](ENVIRONMENT.md) for the full list:
 
 | Variable | Required | Purpose |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | No (recommended) | Real Claude task generation and grading. Without it, the built-in rules are used and the app says so. |
-| `ANTHROPIC_MODEL_FAST` / `ANTHROPIC_MODEL_GRADER` | No | Model names (defaults `claude-haiku-5-5` and `claude-sonnet-5-5`). |
+| `AI_INTEGRATIONS_ANTHROPIC_BASE_URL` / `..._API_KEY` | No (set by Replit) | Claude through Replit AI Integrations, billed to Replit credits |
+| `ANTHROPIC_API_KEY` | No | Claude with your own key (takes priority). Without either, the built-in rules are used and the app says so. |
+| `ANTHROPIC_MODEL_FAST` / `ANTHROPIC_MODEL_GRADER` | No | Model names (defaults `claude-haiku-4-5` and `claude-sonnet-5`, each falling back to `claude-sonnet-4-6`). |
 | `SEED_DEMO_DATA` | No | `false` starts with an empty database. |
 | `DEMO_RESET_TOKEN` | No | Allows resetting the demo data remotely. |
 

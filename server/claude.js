@@ -24,7 +24,8 @@ export function parseJsonReply(text) {
 
 export function createSample(opts) {
   var apiKey = opts.apiKey;
-  var baseUrl = (opts.baseUrl || "https://api.anthropic.com").replace(/\/+$/, "");
+  var baseUrl = (opts.baseUrl || "https://api.anthropic.com").replace(/\/+$/, "").replace(/\/v1$/, "");
+  var pick = { fast: 0, grader: 0 }; // index into the model fallback lists
   var models = opts.models;
   var timeoutMs = opts.timeoutMs || 60000;            // grading calls
   var quickTimeoutMs = opts.timeoutMs || 25000;       // task and question calls
@@ -56,7 +57,8 @@ export function createSample(opts) {
 
   async function json(prompt, o) {
     var tier = (o && o.modelTier) || "default";
-    var model = tier === "quick" ? models.fast : models.grader;
+    var kind = tier === "quick" ? "fast" : "grader";
+    var model = models[kind][pick[kind]];
     var body = { model: model, max_tokens: tier === "quick" ? 1200 : 2400, messages: [{ role: "user", content: prompt }] };
     if (sendTemperature) body.temperature = tier === "quick" ? 0.7 : 0;
     var ms = tier === "quick" ? quickTimeoutMs : timeoutMs;
@@ -75,6 +77,16 @@ export function createSample(opts) {
       coolUntil = Date.now() + COOL_MS;
       log({ op: "claude", tier: tier, ok: false, code: code });
       throw { code: code, message: "Claude request failed (" + code + ")" };
+    }
+    // Model not available to this account: move to the next model in the list and retry.
+    while (r.status === 404 || (r.status === 400 && /model/i.test(r.text))) {
+      if (body.model === models[kind][pick[kind]]) {
+        if (pick[kind] >= models[kind].length - 1) break;
+        pick[kind]++;               // this request is the first to find the model missing
+      }                              // otherwise a parallel request already moved on: just use the current one
+      body.model = models[kind][pick[kind]];
+      log({ op: "claude", tier: tier, ok: false, code: "model_unavailable", message: "switching to " + body.model });
+      try { r = await post(body, ms); } catch (e) { coolUntil = Date.now() + COOL_MS; throw { code: "network_error", message: "Claude request failed" }; }
     }
     if (r.status < 200 || r.status >= 300) {
       var c = codeForStatus(r.status);
@@ -95,5 +107,5 @@ export function createSample(opts) {
     }
   }
 
-  return { json: json };
+  return { json: json, currentModels: function () { return { fast: models.fast[pick.fast], grader: models.grader[pick.grader] }; } };
 }

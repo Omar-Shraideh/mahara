@@ -3,7 +3,7 @@
 ## Before you go on stage
 
 1. Open your Replit URL **5 minutes early** and leave the tab open, so the server is awake.
-2. At the top of the workspace you should **not** see the beige "Offline mode" bar. If you do, Claude isn't connected: check `ANTHROPIC_API_KEY` in Secrets (see ENVIRONMENT.md). The demo still works without it. Results are then scored by the built-in rules and say so.
+2. At the top of the workspace you should **not** see the beige "Offline mode" bar. If you do, Claude isn't connected: connect Replit AI Integrations or add `ANTHROPIC_API_KEY` (see ENVIRONMENT.md). The demo still works without it. Results are then scored by the built-in rules and say so.
 3. If you rehearsed and want the original demo data back, open **Shell** in Replit and run `npm run reset-demo`, then refresh the browser.
 4. Use the laptop at full width. Practise typing the short answers below. **Paste is switched off in the test on purpose**, so you have to type.
 

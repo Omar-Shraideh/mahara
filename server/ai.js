@@ -9,10 +9,18 @@ export function createAiService(opts) {
   var db = opts.db;
   var env = opts.env || process.env;
   var onStatus = opts.onStatus || function () {};
-  var apiKey = (env.ANTHROPIC_API_KEY || "").trim();
+  // Two ways to reach Claude: Replit AI Integrations (Replit-managed, billed to Replit credits;
+  // Replit sets AI_INTEGRATIONS_ANTHROPIC_*), or your own key in ANTHROPIC_API_KEY.
+  var ownKey = (env.ANTHROPIC_API_KEY || "").trim();
+  var replitKey = (env.AI_INTEGRATIONS_ANTHROPIC_API_KEY || "").trim();
+  var replitUrl = (env.AI_INTEGRATIONS_ANTHROPIC_BASE_URL || "").trim();
+  var provider = ownKey ? "anthropic" : replitKey && replitUrl ? "replit" : null;
+  var apiKey = ownKey || (provider === "replit" ? replitKey : "");
+  var baseUrl = ownKey ? env.ANTHROPIC_BASE_URL : replitUrl;
+  // First choice from env, then fallbacks if a model isn't available to this account.
   var models = {
-    fast: (env.ANTHROPIC_MODEL_FAST || "claude-haiku-5-5").trim(),
-    grader: (env.ANTHROPIC_MODEL_GRADER || "claude-sonnet-5-5").trim()
+    fast: [env.ANTHROPIC_MODEL_FAST, "claude-haiku-4-5", "claude-sonnet-4-6"].filter(Boolean).map(function (m) { return m.trim(); }),
+    grader: [env.ANTHROPIC_MODEL_GRADER, "claude-sonnet-5", "claude-sonnet-4-6"].filter(Boolean).map(function (m) { return m.trim(); })
   };
   var lastError = "";
 
@@ -23,7 +31,7 @@ export function createAiService(opts) {
     }
   }
 
-  var sample = apiKey ? createSample({ apiKey: apiKey, baseUrl: env.ANTHROPIC_BASE_URL, models: models, log: log, timeoutMs: Number(env.ANTHROPIC_TIMEOUT_MS) || 0 }) : null;
+  var sample = apiKey ? createSample({ apiKey: apiKey, baseUrl: baseUrl, models: models, log: log, timeoutMs: Number(env.ANTHROPIC_TIMEOUT_MS) || 0 }) : null;
   var claude = AI.createEngine({ sample: sample, onModeChange: function () { onStatus(status()); } });
   var rules = AI.createEngine({}); // never calls Claude
 
@@ -31,7 +39,8 @@ export function createAiService(opts) {
     return {
       mode: claude.state.mode,               // "claude" or "mock" (built-in rules)
       reason: apiKey ? claude.state.reason || "" : "no_api_key",
-      models: apiKey ? models : null,
+      provider: provider,
+      models: apiKey ? sample.currentModels() : null,
       last_error: lastError || null
     };
   }
