@@ -79,6 +79,9 @@ var S = {
     landing_step4: "2 questions about their own answer, 60 seconds each.",
     landing_step5: "Mahara scores it against a fixed rubric and you read the result, with the reason for every score.",
     landing_label: "Scored against a fixed rubric, supervised in person",
+    landing_step5_ai: "Claude grades it twice against a fixed rubric and you read the result.",
+    landing_label_ai: "AI-assessed, supervised in person",
+    label_ai_claude: "AI-assessed, supervised in person",
 
     // employer dashboard
     invite_title: "Invite an applicant",
@@ -335,6 +338,9 @@ var S = {
     landing_step4: "سؤالان عن إجابته، 60 ثانية لكل سؤال.",
     landing_step5: "تقيّم مهارة العمل وفق معايير ثابتة، ثم تقرأ النتيجة مع سبب كل درجة.",
     landing_label: "تقييم وفق معايير ثابتة، بإشراف حضوري",
+    landing_step5_ai: "يقيّم Claude العمل مرتين وفق معايير ثابتة، ثم تقرأ النتيجة.",
+    landing_label_ai: "تقييم بالذكاء الاصطناعي، بإشراف حضوري",
+    label_ai_claude: "تقييم بالذكاء الاصطناعي، بإشراف حضوري",
 
     invite_title: "دعوة متقدم",
     invite_name: "اسم المتقدم",

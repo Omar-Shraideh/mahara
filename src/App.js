@@ -88,7 +88,7 @@ export function App(props) {
   if (route.area === "landing") {
     return html`<div>
       <${TopBar} t=${t} lang=${lang} toggleLang=${toggleLang} onHome=${function () { navigate("/"); }} />
-      <${Landing} ...${common} openEmployer=${function () { openTab("invites"); }} />
+      <${Landing} ...${common} aiMode=${aiMode} openEmployer=${function () { openTab("invites"); }} />
     </div>`;
   }
 

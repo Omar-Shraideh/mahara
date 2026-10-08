@@ -17,7 +17,7 @@ export function Landing(props) {
           <${Mascot} pose="walk" h=${200} blob=${true} />
           <div className="how-text">
             <h2 className="h3" style=${{ fontSize: "var(--step-1)", marginBlockEnd: "4px" }}>${t("landing_how_title")}</h2>
-            <ol className="how">${["landing_step1", "landing_step3", "landing_step4", "landing_step5"].map(function (k) { return html`<li key=${k}><span>${t(k)}</span></li>`; })}</ol>
+            <ol className="how">${["landing_step1", "landing_step3", "landing_step4", "landing_step5"].map(function (k) { var key = k === "landing_step5" && props.aiMode === "claude" ? "landing_step5_ai" : k; return html`<li key=${k}><span>${t(key)}</span></li>`; })}</ol>
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@ export function Landing(props) {
             </div>`;
           })}
         </div>
-        <p className="small muted">${t("landing_label")}</p>
+        <p className="small muted">${t(props.aiMode === "claude" ? "landing_label_ai" : "landing_label")}</p>
       </aside>
     </section>
   </main>`;

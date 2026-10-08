@@ -10,7 +10,15 @@ Never put a real key in a file. `.env.example` lists the names only.
 
 Mahara grades with its own scoring engine against a fixed rubric, so there is **no AI key, no Replit AI integration and no cost**.
 
-If you ever want Claude to write tasks and grade instead, add a secret `ANTHROPIC_API_KEY` (from console.anthropic.com). The code already supports it, and the scoring engine stays as the safety net.
+### Turning on Claude (optional)
+Add one secret, `ANTHROPIC_API_KEY` (from console.anthropic.com; it needs billing set up), then press **Stop** and **Run**. Nothing else changes:
+- Claude writes a fresh task for each applicant, writes the two follow-up questions from their own answer, and grades twice against the rubric (three times if the runs disagree).
+- The start page and reports switch to the AI wording automatically ("Claude grades it twice…", "AI-assessed, supervised in person").
+- If Claude is slow, down or the key is wrong, the scoring engine takes over within seconds and the report says so.
+- Cost: roughly 5–7 cents per test session. Set a monthly spend limit in the Anthropic console.
+- Check: `/api/health` should show `"mode":"claude"`.
+
+To go back, delete the secret and press **Stop** and **Run**.
 
 ## Optional
 

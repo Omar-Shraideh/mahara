@@ -106,7 +106,7 @@ export function ResultPage(props) {
   var spec = engine.fieldsSpec(a.role, tl, bp);
   var dirAttr = tl === "ar" ? "rtl" : "ltr";
   var labels = html`<ul className="labels">
-    <li><strong>${t("label_ai")}</strong></li>
+    <li><strong>${t(a.ai_mode === "claude" ? "label_ai_claude" : "label_ai")}</strong></li>
     ${a.ai_mode === "claude" ? html`<li>${t("label_runs", { n: a.result.runs_used || 2 })}</li>` : null}
     ${bp && bp.draft ? html`<li>${t("label_draft")}</li>` : null}
     ${a.ai_mode === "mock" ? html`<li>${t("label_mock")}</li>` : null}

@@ -3,7 +3,7 @@
 ## Before you go on stage
 
 1. Open your Replit URL **5 minutes early** and leave the tab open, so the server is awake.
-2. Nothing needs connecting: Mahara scores everything with its own engine, no AI key or internet service involved.
+2. Nothing needs connecting: Mahara scores everything with its own engine. **If you added an `ANTHROPIC_API_KEY`**, open `/api/health` and check it says `"mode":"claude"`. Then grading takes about 20–60 seconds instead of instant, so open **Omar Khalil**'s report while you wait.
 3. If you rehearsed and want the original demo data back, open **Shell** in Replit and run `npm run reset-demo`, then refresh the browser.
 4. Use the laptop at full width. Practise typing the short answers below. **Paste is switched off in the test on purpose**, so you have to type.
 
