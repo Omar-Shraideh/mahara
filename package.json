@@ -1,0 +1,29 @@
+{
+  "name": "mahara",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mahara: hire entry-level staff on a 10-minute work sample instead of a CV. Customer Support role, English and Arabic.",
+  "type": "module",
+  "engines": {
+    "node": ">=18.18"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development node server/index.js",
+    "build": "vite build",
+    "start": "cross-env NODE_ENV=production node server/index.js",
+    "replit": "npm install --no-audit --no-fund && (npm run build || echo 'Build failed: serving the prebuilt app in dist/') && npm start",
+    "reset-demo": "node scripts/reset-demo.js",
+    "test": "node scripts/smoke-test.js"
+  },
+  "dependencies": {
+    "@fontsource/alexandria": "5.2.6",
+    "@fontsource/ibm-plex-mono": "5.2.6",
+    "@fontsource/readex-pro": "5.2.6",
+    "cross-env": "7.0.3",
+    "express": "4.21.2",
+    "htm": "3.1.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "vite": "6.0.11"
+  }
+}
