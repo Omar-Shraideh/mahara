@@ -169,7 +169,7 @@ export function rulesRun(bp, submission, followups, lang, task) {
   var action = has(W.action, reply), timing = has(W.timing, reply), vague = has(W.vague, reply);
   var r;
   if (!replyWords) r = 0;
-  else if (action && timing) r = 4;
+  else if (action && timing && quoteInSentence(reply, [W.action, W.timing], 14, [W.attempt])) r = 4; // the time must belong to the next step, not to the failed attempt
   else if (vague) r = 2;
   else if (action) r = 3;
   else if (blame) r = 0;
