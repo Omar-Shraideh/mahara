@@ -5,7 +5,7 @@ import { api } from "./api.js";
 
 export function createClientEngine() {
   var local = AI.createEngine({});
-  var state = { mode: "mock", reason: "" };
+  var state = { mode: "rules", reason: "" };
   return {
     state: state,
     fieldsSpec: local.fieldsSpec,

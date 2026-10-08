@@ -46,7 +46,10 @@ export function App(props) {
     var unsubs = COLLECTIONS.map(function (c) {
       return store.watch(c, function (list) { setData(function (d) { var n = Object.assign({}, d); n[c] = list; return n; }); });
     });
-    unsubs.push(store.onAi(function (st) { engine.state.mode = st.mode; engine.state.reason = st.reason; setAiMode(st.mode); }));
+    unsubs.push(store.onAi(function (st) {
+      var mode = st.mode === "mock" && st.reason === "no_api_key" ? "rules" : st.mode; // no AI configured: the scoring engine is the normal mode
+      engine.state.mode = mode; engine.state.reason = st.reason; setAiMode(mode);
+    }));
     unsubs.push(store.onStatus(setLoadState));
     return function () { unsubs.forEach(function (u) { if (u) u(); }); };
   }, [store]);

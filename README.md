@@ -20,7 +20,7 @@ The Employer / Candidate switch in the top bar lets one laptop play both sides, 
 
 - **Frontend:** React 18 with [htm](https://github.com/developit/htm) templates, built with Vite 6. The screens and the CSS are carried over from the approved design as they are, so the look is identical.
 - **Backend:** Node.js 20 and Express 4 on one port. It serves the app, a small JSON API, live updates (Server-Sent Events), and all Claude calls.
-- **AI:** the Claude Messages API, called only from the server. Haiku generates tasks and questions, and Sonnet grades. A built-in rules grader takes over when there is no key or Claude is unreachable.
+- **Scoring:** Mahara's own rules-based scoring engine grades every answer against the fixed rubric, with a reason and an exact evidence quote for each skill. No AI key or outside service is needed. Optional: with `ANTHROPIC_API_KEY` set, Claude writes the tasks and grades, and the engine becomes the safety net.
 - **Storage:** one JSON file (`data/mahara-db.json`), written atomically.
 - **Fonts:** Readex Pro, Alexandria and IBM Plex Mono, self-hosted through Fontsource, so there are no runtime calls to Google Fonts.
 
@@ -45,7 +45,6 @@ npm test           # starts a throwaway server and runs one full session through
 1. Create a new Repl from the **Node.js** template.
 2. Drag `mahara-replit.zip` into the Files panel.
 3. In the **Shell** tab run: `unzip -o mahara-replit.zip -d . && rm mahara-replit.zip`
-4. Connect the AI: ask the Replit Agent to "set up the Anthropic (Replit managed) AI integration" (billed to Replit credits, no key needed), or add your own `ANTHROPIC_API_KEY` in Secrets. See ENVIRONMENT.md.
 5. Press **Run**. The first run installs packages and builds, which takes about a minute. After that the preview opens on the start page.
 
 `.replit` runs `npm run replit` (install, build, start) and maps port 3000 to the public URL. If the build ever fails, the app still starts from the prebuilt `dist/` folder included in the zip.

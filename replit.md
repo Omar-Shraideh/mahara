@@ -1,19 +1,16 @@
 # Mahara: notes for Replit Agent
 
-This app is finished and tested. Please do not redesign, rewrite or restructure it.
+This app is finished and tested. Please do not redesign, rewrite, restructure it, or add an AI integration.
 
 ## Run
-- `.replit` runs `npm run replit` (install, build, start) on port 3000. Nothing else is needed.
-- Health check: `GET /api/health`. `"mode":"claude"` means AI is connected.
+- `.replit` runs `npm run replit` (install, build, start) on port 3000. Nothing else is needed: no secrets, no database setup, no AI keys.
+- Health check: `GET /api/health`.
 
-## AI (the only setup task)
-- The app uses Anthropic Claude **only through the Replit AI Integrations environment variables**:
-  `AI_INTEGRATIONS_ANTHROPIC_BASE_URL` and `AI_INTEGRATIONS_ANTHROPIC_API_KEY`.
-- Please set up the **Anthropic (Replit managed)** AI integration so these two variables exist. No code change is needed: `server/ai.js` already reads them and calls `POST {base}/v1/messages`.
-- Models tried in order: `claude-haiku-4-5` (tasks, questions); `claude-sonnet-5`, then `claude-sonnet-4-6` (grading).
-- If the variables are missing, the app still works with built-in rules and shows an "Offline mode" note.
+## How scoring works
+- Mahara grades with its own rules-based scoring engine (`shared/fallbackGrader.js`) against a fixed rubric. This is intentional.
+- The code can optionally use Claude if `ANTHROPIC_API_KEY` is set later, but that is not wanted now.
 
 ## Structure
-- `server/` holds Express (API, live updates), the JSON-file database, and the AI service.
-- `shared/` holds scoring logic, the task blueprint, prompts, the AI engine, the rules grader, and English and Arabic strings.
+- `server/` holds Express (API, live updates), the JSON-file database, and the grading service.
+- `shared/` holds scoring logic, the task blueprint, the scoring engine, and English and Arabic strings.
 - `src/` holds the React screens (htm templates) and `styles.css`, which is the approved design, unchanged.

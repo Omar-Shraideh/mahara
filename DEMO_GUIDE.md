@@ -3,7 +3,7 @@
 ## Before you go on stage
 
 1. Open your Replit URL **5 minutes early** and leave the tab open, so the server is awake.
-2. At the top of the workspace you should **not** see the beige "Offline mode" bar. If you do, Claude isn't connected: connect Replit AI Integrations or add `ANTHROPIC_API_KEY` (see ENVIRONMENT.md). The demo still works without it. Results are then scored by the built-in rules and say so.
+2. Nothing needs connecting: Mahara scores everything with its own engine, no AI key or internet service involved.
 3. If you rehearsed and want the original demo data back, open **Shell** in Replit and run `npm run reset-demo`, then refresh the browser.
 4. Use the laptop at full width. Practise typing the short answers below. **Paste is switched off in the test on purpose**, so you have to type.
 
@@ -28,7 +28,7 @@
 ## 1:30–2:30 — Core product: the applicant does real work
 
 1. Click **English** (or **العربية** to show Arabic), tick the consent box, and click **Start the task**.
-2. **Say:** "Claude writes a fresh scenario each time, with one fact planted in it. Here the courier already tried to deliver. Paste is off and tab switches are recorded."
+2. **Say:** "Every applicant gets the same real situation, with one fact planted in it: here the courier already tried to deliver. Paste is off and tab switches are recorded."
 3. In **Reply to the customer**, type (short is fine):
    > Sorry for the delay. Our driver tried to deliver on 4 October at 11:40 but couldn't reach you. I've booked a new delivery for tomorrow between 4 and 7 pm.
 4. In **Internal note to logistics**, type:
@@ -37,7 +37,7 @@
 
 ## 2:30–3:30 — Key value: two questions only the author can answer
 
-1. Two questions appear, 60 seconds each. **Say:** "These are written from their own answer. Someone who copied can't defend it."
+1. Two questions appear, 60 seconds each. **Say:** "They have to explain their own choices. Someone who copied an answer can't defend it."
 2. Type one line for each, for example:
    > I gave a time window the driver can keep, and mentioned the missed call so she knows it isn't lost.
    > If the courier never tried, it's our mistake, so I'd apologise directly and offer free delivery.
@@ -46,7 +46,7 @@
 ## 3:30–5:00 — Final feature: the result
 
 1. In the top bar, click **Employer**, then the **Results** tab.
-2. Your applicant appears in the list, sorted by level. With Claude, grading takes about 20–60 seconds. If the row isn't there yet, open **Omar Khalil** first and come back.
+2. Your applicant appears in the list straight away, sorted by level.
 3. Open the result. **Show:** the level badge, **Scores by skill** with a reason for each, ownership, time used, tab switches and blocked pastes.
 4. Click the **Work** tab. **Say:** "Every score points to the exact words in their answer."
 5. Click **Shortlist**.
@@ -57,9 +57,9 @@
 
 ## Backup demo path
 
-Use this if anything goes wrong live (no internet, slow AI, or a typing mistake):
+Use this if anything goes wrong live (slow Wi-Fi or a typing mistake):
 
-- **Claude is slow or down:** do nothing. After one failed call, Mahara switches to its built-in rules within seconds and labels the result "Scored by Mahara's built-in rules because Claude was not available." Keep going.
+- **No internet at the venue:** it doesn't matter for scoring. Mahara grades on its own server, with no outside service involved.
 - **You don't want to type live:** skip the test. Open **Results** and walk through the ready-made reports:
   - **Omar Khalil**: Strong, English, shortlisted.
   - **Noor Abbadi**: Strong, Arabic.

@@ -1,5 +1,5 @@
-/* Mahara built-in rules grader.
-   Used only when Claude is not connected (no ANTHROPIC_API_KEY) or cannot be reached.
+/* Mahara scoring engine (rules-based).
+   The default grader: used whenever no AI key is configured, and as the safety net if an AI connection fails.
    It reads the candidate's actual reply and internal note and checks them against the
    Customer Support rubric: apology and acknowledgement, a concrete next step with timing,
    use of the order facts (above all the attempted delivery), length, and whether the note

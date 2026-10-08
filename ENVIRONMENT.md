@@ -1,31 +1,16 @@
 # Environment variables
 
-Mahara runs with **no settings at all**. Every variable below is optional. Add them in Replit under **Tools → Secrets** (the padlock icon): click **New secret**, enter the name exactly as written, paste the value, and save. Then press **Stop** and **Run** so the app picks it up.
+Mahara runs with **no settings at all**. You can skip this file. Every variable below is optional. Add them in Replit under **Tools → Secrets** (the padlock icon): click **New secret**, enter the name exactly as written, paste the value, and save. Then press **Stop** and **Run** so the app picks it up.
 
 If you publish with **Deploy**, open the deployment's settings and check that the same secrets are listed there too.
 
 Never put a real key in a file. `.env.example` lists the names only.
 
-## Connecting the AI: pick one
+## AI: not needed
 
-### Option A (no key of your own): Replit AI Integrations
-Replit can give the app Claude access and bill it to your Replit credits. Open the **Agent** in your Repl and send:
+Mahara grades with its own scoring engine against a fixed rubric, so there is **no AI key, no Replit AI integration and no cost**.
 
-> Set up the Anthropic (Replit managed) AI integration for this app. Don't change any code.
-
-Approve when it asks. Replit then sets `AI_INTEGRATIONS_ANTHROPIC_BASE_URL` and `AI_INTEGRATIONS_ANTHROPIC_API_KEY` itself, and Mahara uses them automatically. Press **Stop** and **Run** afterwards.
-- **Plan:** Replit says this is not available on the free Starter plan. On Pro and Enterprise, an admin may have to switch it on in the organization settings.
-- **Deployments:** Replit's docs don't say whether it carries over to a published Deployment. Check `/api/health` on the deployed URL.
-
-### Option B: your own Anthropic key
-
-### `ANTHROPIC_API_KEY`
-- **What it does:** turns on Claude. Claude writes a fresh task for each applicant, writes the two follow-up questions from their answer, and grades the work against the rubric (two runs, plus a third if they disagree).
-- **Required?** No, but use it for judging. It is what the product promises.
-- **Where to get it:** [console.anthropic.com](https://console.anthropic.com) → API keys → Create key. It starts with `sk-ant-`.
-- **If it's missing:** the app works fully, but tasks come from the built-in task template and scores from Mahara's built-in rules. A beige bar at the top says "Offline mode: Claude is not connected…", and each report says it was scored by the built-in rules.
-- **If it's wrong or expired:** the first call fails. Mahara switches to the built-in rules and shows the same bar. Nothing crashes.
-- **Cost:** each test session makes about 5–7 Claude calls (1 task, 1 question set, 4–6 grading calls).
+If you ever want Claude to write tasks and grade instead, add a secret `ANTHROPIC_API_KEY` (from console.anthropic.com). The code already supports it, and the scoring engine stays as the safety net.
 
 ## Optional
 
