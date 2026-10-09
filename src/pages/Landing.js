@@ -60,10 +60,12 @@ export function Landing(props) {
   var s1 = useState("B"), pick = s1[0], setPick = s1[1];
   var s2 = useState(false), typing = s2[0], setTyping = s2[1];
   var timer = useRef(null);
+  var first = useRef(true); // the first render staggers the chat in after the headline
   useEffect(function () { return function () { clearTimeout(timer.current); }; }, []);
 
   function choose(key) {
     if (key === pick && !typing) return;
+    first.current = false;
     setPick(key);
     setTyping(true);
     clearTimeout(timer.current);
@@ -86,7 +88,7 @@ export function Landing(props) {
       </div>
 
       <section className="chat" aria-label=${t("chat_status")}>
-        <header className="chat-head">
+        <header className="chat-head bi" style=${{ "--d": "300ms" }}>
           ${avatar}
           <div className="chat-who">
             <strong>${t("chat_name")}</strong>
@@ -96,19 +98,19 @@ export function Landing(props) {
         </header>
 
         <div className="chat-body">
-          <div className="msg bot">${avatar}<p className="bubble">${t("chat_hello")}</p></div>
+          <div className="msg bot bi" style=${{ "--d": "450ms" }}>${avatar}<p className="bubble">${t("chat_hello")}</p></div>
 
-          <div className="msg you">
+          <div className="msg you bi" key=${"you" + opt.key} style=${{ "--d": first.current ? "600ms" : "0ms" }}>
             <div className="bubble you-bubble"><strong>${t("chat_ask", { x: opt.key })}</strong><span lang="en" dir="ltr">“${opt.excerpt}”</span></div>
             <span className="you-tag">${t("chat_you")}</span>
           </div>
 
           ${typing
-            ? html`<div className="msg bot">${avatar}<p className="bubble typing" role="status" aria-label=${t("chat_scoring")}><i></i><i></i><i></i></p></div>`
+            ? html`<div className="msg bot">${avatar}<p className="bubble typing bi" role="status" aria-label=${t("chat_scoring")}><i></i><i></i><i></i></p></div>`
             : html`<div className="msg bot" aria-live="polite">
                 ${avatar}
                 <div className="bot-stack">
-                  <div className="result-card" key=${opt.key}>
+                  <div className="result-card" key=${opt.key} style=${{ "--d": first.current ? "750ms" : "0ms" }}>
                     <div className="result-card-head">
                       <span>${t("chat_card", { x: opt.key })}</span>
                       <${LevelBadge} t=${t} level=${r.level} />
@@ -127,7 +129,7 @@ export function Landing(props) {
               </div>`}
         </div>
 
-        <footer className="chat-foot">
+        <footer className="chat-foot bi" style=${{ "--d": "900ms" }}>
           <div className="chat-chips">
             ${OPTIONS.map(function (o) {
               return html`<button key=${o.key} type="button" className="chip-btn" aria-pressed=${pick === o.key} onClick=${function () { choose(o.key); }}>${t("chat_ask", { x: o.key })}</button>`;
