@@ -459,13 +459,19 @@ table.data th.num { text-align: end; }
 .landing { position: relative; }
 .landing-split { position: relative; z-index: 1; }
 /* landing motion (from Superdesign library ideas: staggered headline, hand-drawn underline, data fill) */
-.hl-word { display: inline-block; animation: hl-rise .6s cubic-bezier(.2,.8,.2,1) both; }
-@keyframes hl-rise { from { opacity: 0; transform: translateY(0.45em); } to { opacity: 1; transform: none; } }
+/* headline loop, 4.2s per word: blur in (0.8s), hold, blur out (0.6s), short gap. With the
+   stagger, the whole line is sharp for about 2 seconds of every loop. */
+.hl-word { display: inline-block; animation: hl-blurloop 4.2s cubic-bezier(.2,.8,.2,1) var(--d, 0ms) infinite both; }
+@keyframes hl-blurloop {
+  0% { opacity: 0; filter: blur(10px); transform: translateY(0.15em); }
+  19%, 81% { opacity: 1; filter: blur(0); transform: none; }
+  95%, 100% { opacity: 0; filter: blur(10px); transform: translateY(-0.1em); }
+}
 .hl-key { position: relative; white-space: nowrap; z-index: 0; }
 .hl-underline { position: absolute; left: -4%; right: auto; bottom: -0.12em; width: 108%; height: 0.36em; overflow: visible; z-index: -1; }
-.hl-underline path { fill: none; stroke: var(--gold); stroke-width: 4.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: hl-draw .8s cubic-bezier(.65,0,.35,1) .75s forwards; }
+.hl-underline path { fill: none; stroke: var(--gold); stroke-width: 4.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: hl-drawloop 4.2s cubic-bezier(.65,0,.35,1) var(--d, 0ms) infinite both; }
 html[dir="rtl"] .hl-underline { transform: scaleX(-1); }
-@keyframes hl-draw { to { stroke-dashoffset: 0; } }
+@keyframes hl-drawloop { 0%, 21% { stroke-dashoffset: 1; } 40%, 100% { stroke-dashoffset: 0; } }
 .rc-bar > span { transform-origin: left center; animation: rc-fill .7s cubic-bezier(.2,.8,.2,1) both; }
 html[dir="rtl"] .rc-bar > span { transform-origin: right center; }
 @keyframes rc-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
@@ -516,3 +522,22 @@ html[dir="rtl"] .mascot { transform: scaleX(-1); }
 .empty-panel { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 22px; }
 @media (max-width: 640px) { .intro-head .mascot, .empty-panel .mascot { height: 80px !important; } }
 @media (max-width: 560px) { .how-panel { flex-direction: column; align-items: flex-start; } .how-panel .mascot { height: 150px !important; } }
+
+/* chat card colours: white card, light-sky chat area, navy accents, sunny gold highlight */
+.chat { --c-surface: #ffffff; --c-body: #eaf6fc; --c-bubble: #ffffff; --c-accent: #0b2b42; --c-on-accent: #ffffff; --c-avatar: #cfeaf8; --c-track: #dff0f9; --c-mark: rgba(245, 204, 116, 0.75); --c-tag: #f8dc97; --c-chip: #ffffff; --c-soft: #cfeaf8; }
+.chat, .chat-head, .chat-foot, .result-card { background: var(--c-surface); }
+.chat-body { background: var(--c-body); }
+.bubble { background: var(--c-bubble); }
+.you-bubble { background: var(--c-accent); color: var(--c-on-accent); }
+.you-tag { background: var(--c-surface); }
+.chat-avatar { background: var(--c-avatar); }
+.chat-pill { background: var(--c-accent); color: var(--c-on-accent); }
+.rc-bar { background: var(--c-track); }
+.rc-bar > span { background: var(--c-accent); }
+.rc-evidence mark { background-image: linear-gradient(var(--c-mark), var(--c-mark)); }
+.rc-tag { background: var(--c-tag); }
+.chip-btn { background: var(--c-chip); }
+.chip-btn[aria-pressed="true"] { background: var(--c-accent); color: var(--c-on-accent); }
+.chat .level.strong { background: var(--c-accent); color: var(--c-on-accent); }
+.chat .level.job_ready { background: var(--c-soft); }
+.chat .level.emerging { background: var(--c-surface); }

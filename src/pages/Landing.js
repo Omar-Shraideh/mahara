@@ -31,8 +31,9 @@ function resultFor(ex) {
   return { criteria: criteria, level: level, weakest: weakest, evidence: evidence };
 }
 
-// Headline: each word rises in with a short stagger; the [bracketed] phrase gets a
-// hand-drawn highlighter underline that draws itself after the words land.
+// Headline: the words blur into focus one after another, hold steady for about two seconds,
+// blur away and start again. The [bracketed] phrase gets a hand-drawn highlighter underline
+// that redraws on every loop. Screen readers get the plain sentence from aria-label.
 function Headline(props) {
   var parts = String(props.text).split(/(\[[^\]]+\])/);
   var i = 0;
@@ -41,13 +42,13 @@ function Headline(props) {
     if (!part) return;
     if (part.charAt(0) === "[") {
       var phrase = part.slice(1, -1);
-      out.push(html`<span key=${"k" + p} className="hl-word hl-key" style=${{ animationDelay: (i++ * 55) + "ms" }}>${phrase}<svg className="hl-underline" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 9.5 C 38 4.5, 82 3.2, 122 5.6 S 182 9.8, 197 5"></path></svg></span>`);
+      out.push(html`<span key=${"k" + p} className="hl-word hl-key" style=${{ "--d": (i++ * 55) + "ms" }}>${phrase}<svg className="hl-underline" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 9.5 C 38 4.5, 82 3.2, 122 5.6 S 182 9.8, 197 5"></path></svg></span>`);
       out.push(" ");
       return;
     }
     part.split(/\s+/).forEach(function (w, j) {
       if (!w) return;
-      out.push(html`<span key=${"w" + p + "-" + j} className="hl-word" style=${{ animationDelay: (i++ * 55) + "ms" }}>${w}</span>`);
+      out.push(html`<span key=${"w" + p + "-" + j} className="hl-word" style=${{ "--d": (i++ * 55) + "ms" }}>${w}</span>`);
       out.push(" ");
     });
   });
