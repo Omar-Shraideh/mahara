@@ -1,18 +1,19 @@
-import { html, useState, B, L } from "../lib/core.js";
+import { html, useState, useEffect, useRef, B, L } from "../lib/core.js";
 import { LevelBadge } from "../components/LevelBadge.js";
 import { Mascot } from "../components/Mascot.js";
 
-// Landing: a two-line pitch and one interactive demo. The visitor picks one of three real
-// sample replies (the blueprint's hand-graded examples) and sees the level, the five skill
-// scores and the evidence highlighted in the reply. Nothing here calls the AI.
+// Landing: two lines and a button on one side, a chat-style scoring demo on the other.
+// The visitor taps one of three sample replies (the blueprint's hand-graded examples) and
+// Mahara answers with the level, the five skill scores and one evidence quote.
+// Nothing here calls the AI: the scores are the pre-graded examples.
 var bp = B.VERIFIED.customer_support;
 var byLabel = {};
 bp.graded_examples.forEach(function (ex) { byLabel[ex.label] = ex; });
 // Not sorted best-to-worst, so the visitor has to read them.
 var OPTIONS = [
-  { key: "A", ex: byLabel.middle },
-  { key: "B", ex: byLabel.strong },
-  { key: "C", ex: byLabel.weak }
+  { key: "A", ex: byLabel.middle, excerpt: "We apologise for the delay in your order. We will look into it…" },
+  { key: "B", ex: byLabel.strong, excerpt: "I'm sorry your order ZH-48213 is now four days late…" },
+  { key: "C", ex: byLabel.weak, excerpt: "Delays happen because of the courier company, it is not our fault…" }
 ];
 
 function resultFor(ex) {
@@ -22,89 +23,93 @@ function resultFor(ex) {
   });
   var level = L.levelFor(L.weightedScore(criteria, bp.rubric).P);
   var weakest = criteria.reduce(function (min, c) { return c.score < min.score ? c : min; }, criteria[0]);
-  return { criteria: criteria, level: level, weakest: weakest };
-}
-
-// Splits the reply into plain and highlighted runs, one highlight per evidence quote found in it.
-function highlight(text, quotes) {
-  var marks = [];
-  quotes.forEach(function (q) {
-    if (!q) return;
-    var i = text.indexOf(q);
-    if (i !== -1) marks.push([i, i + q.length]);
-  });
-  marks.sort(function (a, b) { return a[0] - b[0]; });
-  var out = [], pos = 0;
-  marks.forEach(function (m, k) {
-    if (m[0] < pos) return; // overlapping quote: keep the first
-    if (m[0] > pos) out.push(text.slice(pos, m[0]));
-    out.push(html`<mark key=${"m" + k}>${text.slice(m[0], m[1])}</mark>`);
-    pos = m[1];
-  });
-  if (pos < text.length) out.push(text.slice(pos));
-  return out;
+  // Evidence: the quote behind the most heavily weighted skill that has one.
+  var byWeight = bp.rubric.slice().sort(function (a, b) { return b.weight - a.weight; });
+  var evidence = "";
+  byWeight.some(function (rc) { var q = ex.scores[rc.id][2]; if (q) { evidence = q; return true; } return false; });
+  return { criteria: criteria, level: level, weakest: weakest, evidence: evidence };
 }
 
 export function Landing(props) {
   var t = props.t, lang = props.lang;
-  var s = useState("A"), pick = s[0], setPick = s[1];
+  var s1 = useState("B"), pick = s1[0], setPick = s1[1];
+  var s2 = useState(false), typing = s2[0], setTyping = s2[1];
+  var timer = useRef(null);
+  useEffect(function () { return function () { clearTimeout(timer.current); }; }, []);
+
+  function choose(key) {
+    if (key === pick && !typing) return;
+    setPick(key);
+    setTyping(true);
+    clearTimeout(timer.current);
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    timer.current = setTimeout(function () { setTyping(false); }, reduce ? 0 : 750);
+  }
+
   var opt = OPTIONS.filter(function (o) { return o.key === pick; })[0];
   var r = resultFor(opt.ex);
-  var reply = opt.ex.fields.reply;
+  var skill = function (id) { return B.CRITERIA_NAMES[id][lang]; };
+  var avatar = html`<span className="chat-avatar" aria-hidden="true"><${Mascot} pose="cheer" h=${64} /></span>`;
+
   return html`<main className="landing">
-    <section className="hero">
-      <h1>${t("landing_title")}</h1>
-      <p className="lede">${t("landing_sub")}</p>
-      <div className="row"><button className="btn btn-primary btn-lg" onClick=${props.openEmployer}>${t("landing_cta")}</button></div>
-    </section>
-
-    <section className="panel raised demo" aria-labelledby="demo-title">
-      <div className="demo-head">
-        <h2 id="demo-title" className="demo-title">${t("demo_title")}</h2>
-        <${Mascot} pose="point" h=${72} />
+    <section className="landing-split">
+      <div className="hero">
+        <h1>${t("landing_title")}</h1>
+        <p className="lede">${t("landing_sub")}</p>
+        <div className="row"><button className="btn btn-primary btn-lg" onClick=${props.openEmployer}>${t("landing_cta")}</button></div>
       </div>
 
-      <div className="demo-grid">
-        <div className="demo-col">
-          <div className="demo-msg">
-            <span className="label-caps">${t("demo_customer")}</span>
-            <p>${t("demo_message")}</p>
+      <section className="chat" aria-label=${t("chat_status")}>
+        <header className="chat-head">
+          ${avatar}
+          <div className="chat-who">
+            <strong>${t("chat_name")}</strong>
+            <span className="chat-status"><span className="chat-dot" aria-hidden="true"></span>${t("chat_status")}</span>
           </div>
-          <div className="demo-fact">
-            <span className="label-caps">${t("demo_facts")}</span>
-            <p>${t("demo_facts_text")}</p>
+          <span className="chat-pill">${t("chat_pill")}</span>
+        </header>
+
+        <div className="chat-body">
+          <div className="msg bot">${avatar}<p className="bubble">${t("chat_hello")}</p></div>
+
+          <div className="msg you">
+            <div className="bubble you-bubble"><strong>${t("chat_ask", { x: opt.key })}</strong><span lang="en" dir="ltr">“${opt.excerpt}”</span></div>
+            <span className="you-tag">${t("chat_you")}</span>
           </div>
-          <div className="demo-picks" role="group" aria-label=${t("demo_title")}>
+
+          ${typing
+            ? html`<div className="msg bot">${avatar}<p className="bubble typing" role="status" aria-label=${t("chat_scoring")}><i></i><i></i><i></i></p></div>`
+            : html`<div className="msg bot" aria-live="polite">
+                ${avatar}
+                <div className="bot-stack">
+                  <p className="bubble">${t("chat_done", { x: opt.key, skill: skill(r.weakest.id) })}</p>
+                  <div className="result-card">
+                    <div className="result-card-head">
+                      <span>${t("chat_card", { x: opt.key })}</span>
+                      <${LevelBadge} t=${t} level=${r.level} />
+                    </div>
+                    ${r.criteria.map(function (c) {
+                      return html`<div className="rc-row" key=${c.id}>
+                        <span className="rc-name">${skill(c.id)}</span>
+                        <span className="rc-bar" aria-hidden="true"><span style=${{ width: (c.score / 4 * 100) + "%" }}></span></span>
+                        <bdi className="rc-val">${c.score} / 4</bdi>
+                      </div>`;
+                    })}
+                    ${r.evidence ? html`<div className="rc-evidence"><span className="label-caps">${t("chat_evidence")}</span><mark lang="en" dir="ltr">“${r.evidence}”</mark></div>` : null}
+                  </div>
+                </div>
+              </div>`}
+        </div>
+
+        <footer className="chat-foot">
+          <span className="label-caps">${t("chat_try")} ↓</span>
+          <div className="chat-chips">
             ${OPTIONS.map(function (o) {
-              return html`<button key=${o.key} type="button" className="demo-pick" aria-pressed=${pick === o.key} onClick=${function () { setPick(o.key); }}>${t("demo_option", { x: o.key })}</button>`;
+              return html`<button key=${o.key} type="button" className="chip-btn" aria-pressed=${pick === o.key} onClick=${function () { choose(o.key); }}>${t("chat_ask", { x: o.key })}</button>`;
             })}
           </div>
-        </div>
-
-        <div className="demo-col">
-          <span className="label-caps">${t("demo_reply")}</span>
-          <p className="demo-reply" lang="en" dir="ltr">${highlight(reply, r.criteria.map(function (c) { return c.quote; }))}</p>
-          ${lang === "ar" ? html`<p className="small muted">${t("demo_lang_note")}</p>` : null}
-        </div>
-
-        <div className="demo-col" aria-live="polite">
-          <div className="row-between">
-            <span className="label-caps">${t("demo_result")}</span>
-            <${LevelBadge} t=${t} level=${r.level} />
-          </div>
-          <div className="scores demo-scores">
-            ${r.criteria.map(function (c) {
-              return html`<div className="score" key=${c.id}>
-                <div className="score-head"><span className="score-name">${B.CRITERIA_NAMES[c.id][lang]}</span><bdi className="score-val">${c.score} / 4</bdi></div>
-                <div className="bar"><span style=${{ width: (c.score / 4 * 100) + "%" }}></span></div>
-              </div>`;
-            })}
-          </div>
-          <p className="demo-why"><strong>${t("demo_weakest")}: ${B.CRITERIA_NAMES[r.weakest.id][lang]}.</strong> <span lang="en" dir="ltr">${r.weakest.reason}</span></p>
-        </div>
-      </div>
-
-      <p className="small muted">${t("demo_note")} ${t(props.aiMode === "claude" ? "landing_label_ai" : "landing_label")}.</p>
+        </footer>
+      </section>
     </section>
   </main>`;
 }

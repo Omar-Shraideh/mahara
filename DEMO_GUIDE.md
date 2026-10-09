@@ -15,7 +15,7 @@
 
 **Say:** "Entry-level CVs in Jordan all look the same. Mahara replaces the CV screen with a 10-minute work sample: real work for the role, two questions about their own answer, and a level with the reason for every score. In Arabic or English."
 
-**Click:** in **Try it**, click **Reply C**, then **Reply B**. The level goes from Emerging to Strong, the skill bars move, and the highlighted words in the reply are the evidence for each score. **Say:** "Same customer, three applicants. You can see exactly why one is Strong."
+**Click:** in the chat card on the right, click **Score reply C**, then **Score reply B**. The level goes from Emerging to Strong, the skill bars change, and the highlighted quote is the evidence. **Say:** "Same customer, three applicants. You can see exactly why one is Strong." (These are pre-scored sample replies, and the card says so. Live scoring happens in the real test below.)
 
 ## 0:30–1:30 — First interaction: invite an applicant
 
