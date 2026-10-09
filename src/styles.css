@@ -454,8 +454,8 @@ table.data th.num { text-align: end; }
   .chat-body { gap: 8px; padding-block: 10px; }
 }
 @media (prefers-reduced-motion: reduce) { .typing i { animation: none; opacity: .6; } .chip-btn { transition: none; } }
-/* animated squares background (landing only) */
-.squares-bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: block; }
+/* animated light-rays background (landing only) */
+.rays-bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: block; }
 .landing { position: relative; }
 .landing-split { position: relative; z-index: 1; }
 /* landing motion (from Superdesign library ideas: staggered headline, hand-drawn underline, data fill) */
