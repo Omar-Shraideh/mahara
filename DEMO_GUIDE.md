@@ -15,7 +15,7 @@
 
 **Say:** "Entry-level CVs in Jordan all look the same. Mahara replaces the CV screen with a 10-minute work sample: real work for the role, two questions about their own answer, and a level with the reason for every score. In Arabic or English."
 
-**Point at:** the example result card on the right (Strong, five skills with scores).
+**Click:** in **Try it**, click **Reply C**, then **Reply B**. The level goes from Emerging to Strong, the skill bars move, and the highlighted words in the reply are the evidence for each score. **Say:** "Same customer, three applicants. You can see exactly why one is Strong."
 
 ## 0:30–1:30 — First interaction: invite an applicant
 
