@@ -74,14 +74,14 @@ export function Landing(props) {
   var opt = OPTIONS.filter(function (o) { return o.key === pick; })[0];
   var r = resultFor(opt.ex);
   var skill = function (id) { return B.CRITERIA_NAMES[id][lang]; };
-  var avatar = html`<span className="chat-avatar" aria-hidden="true"><${Mascot} pose="cheer" h=${64} /></span>`;
+  var avatar = html`<span className="chat-avatar" aria-hidden="true"><${Mascot} pose="face" h=${40} /></span>`;
 
   return html`<main className="landing">
     <${LightRaysBackground} />
     <section className="landing-split">
       <div className="hero">
         <${Headline} text=${t("landing_title")} />
-        <p className="lede">${t("landing_sub")}</p>
+        <p className="lede hl-sub">${t("landing_sub")}</p>
         <div className="row"><button className="btn btn-primary btn-lg" onClick=${props.openEmployer}>${t("landing_cta")}</button></div>
       </div>
 

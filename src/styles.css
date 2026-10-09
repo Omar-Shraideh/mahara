@@ -471,6 +471,7 @@ table.data th.num { text-align: end; }
 .hl-underline { position: absolute; left: -4%; right: auto; bottom: -0.12em; width: 108%; height: 0.36em; overflow: visible; z-index: -1; }
 .hl-underline path { fill: none; stroke: var(--gold); stroke-width: 4.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: hl-drawloop 4.2s cubic-bezier(.65,0,.35,1) var(--d, 0ms) infinite both; }
 html[dir="rtl"] .hl-underline { transform: scaleX(-1); }
+.hl-sub { animation: hl-blurloop 4.2s cubic-bezier(.2,.8,.2,1) 600ms infinite both; }
 @keyframes hl-drawloop { 0%, 21% { stroke-dashoffset: 1; } 40%, 100% { stroke-dashoffset: 0; } }
 .rc-bar > span { transform-origin: left center; animation: rc-fill .7s cubic-bezier(.2,.8,.2,1) both; }
 html[dir="rtl"] .rc-bar > span { transform-origin: right center; }
@@ -480,7 +481,7 @@ html[dir="rtl"] .rc-bar > span { transform-origin: right center; }
 .result-card { animation: rc-in .35s ease-out both; }
 @keyframes rc-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
-  .hl-word, .rc-bar > span, .rc-evidence mark, .result-card { animation: none; }
+  .hl-word, .hl-sub, .rc-bar > span, .rc-evidence mark, .result-card { animation: none; }
   .hl-underline path { animation: none; stroke-dashoffset: 0; }
 }
 @media (max-width: 480px) { .chat-body, .chat-head, .chat-foot { padding-inline: 12px; } .msg .chat-avatar { display: none; } .rc-row { grid-template-columns: minmax(0, 1fr) 44px auto; } }
@@ -541,3 +542,8 @@ html[dir="rtl"] .mascot { transform: scaleX(-1); }
 .chat .level.strong { background: var(--c-accent); color: var(--c-on-accent); }
 .chat .level.job_ready { background: var(--c-soft); }
 .chat .level.emerging { background: var(--c-surface); }
+
+/* chat avatars: a face-only crop of the mascot that fills the circle */
+.chat-avatar { align-items: center; }
+.chat-avatar .mascot-wrap { width: 100%; height: 100%; margin: 0; display: block; }
+.chat-avatar .mascot { width: 100%; height: 100% !important; object-fit: cover; }
