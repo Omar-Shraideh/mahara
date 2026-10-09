@@ -242,6 +242,7 @@ table.t tr:last-child td { border-block-end: 0; }
 table.t td.wrap { white-space: normal; min-width: 140px; }
 table.t tbody tr.clickable { cursor: pointer; }
 table.t tbody tr.clickable:hover { background: var(--panel-2); }
+table.t tbody tr.clickable:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
 table.data td.num { text-align: end; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 table.data th.num { text-align: end; }
 
@@ -444,6 +445,7 @@ table.data th.num { text-align: end; }
 .rc-evidence mark { font-size: 0.8125rem; line-height: 1.5; }
 .chat-foot { padding: 10px 16px 14px; gap: 0; }
 .chip-btn { min-height: 40px; padding: 7px 10px; font-size: var(--step--1); min-width: 100px; }
+@media (max-width: 960px) { .landing-split { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
 @media (max-height: 640px) and (min-width: 961px) {
   .landing { padding-block: 6px 8px !important; }
   .chat-foot { padding-block: 8px 10px; }

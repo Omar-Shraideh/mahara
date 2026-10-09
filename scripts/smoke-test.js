@@ -41,7 +41,9 @@ try {
   const q = (await call("POST", "/api/ai/questions", { attempt_id: att })).json;
   check(q && q.questions && q.questions.length === 2, "two follow-up questions");
   await call("PATCH", "/api/db/attempts/" + att, { status: "defended", followups: q.questions.map((x) => ({ text: x, answer: "Because a delivery window is something the driver can keep, and the call ahead avoids another missed delivery." })) });
-  check((await call("POST", "/api/attempts/" + att + "/grade")).status === 202, "grading started");
+  // The server starts grading by itself when the defend answers are saved, so this call may find it already done.
+  const g = await call("POST", "/api/attempts/" + att + "/grade");
+  check(g.status === 202 || (g.status === 200 && g.json && g.json.status === "graded"), "grading started");
   let a = null;
   for (let i = 0; i < 120; i++) { await sleep(500); a = (await call("GET", "/api/data")).json.data.attempts.find((x) => x.id === att); if (a.status === "graded" || a.status === "grading_failed") break; }
   check(a && a.status === "graded", "session graded: " + (a && a.level) + " via " + (a && a.ai_mode));

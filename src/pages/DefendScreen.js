@@ -14,6 +14,7 @@ export function DefendScreen(props) {
   var s1 = useState(""), answer = s1[0], setAnswer = s1[1];
   var s2 = useState(""), toast = s2[0], setToast = s2[1];
   var s3 = useState(false), failed = s3[0], setFailed = s3[1];
+  var s4 = useState(0), retryN = s4[0], setRetryN = s4[1];
   var wrap = useRef(null);
   var blocked = useRef(0);
   var generating = useRef(false);
@@ -22,14 +23,16 @@ export function DefendScreen(props) {
 
   useEffect(function () {
     if (!a || !bp || generating.current) return;
-    if (a.status === "submitted" && !(a.followups && a.followups.length)) {
+    // "defending" with no questions yet means the page was refreshed while they were loading
+    if ((a.status === "submitted" || a.status === "defending") && !(a.followups && a.followups.length)) {
       generating.current = true;
+      setFailed(false);
       store.update("attempts", a.id, { status: "defending" })
         .then(function () { return ctx.engine.generateQuestions(bp, a.task, a.submission, a.lang, a.id); })
         .then(function (r) { return store.update("attempts", a.id, { followups: r.questions.map(function (q) { return { text: q }; }), followups_source: r.source }); })
         .catch(function () { setFailed(true); generating.current = false; });
     }
-  }, [a && a.status, a && a.followups && a.followups.length]);
+  }, [a && a.status, a && a.followups && a.followups.length, retryN]);
 
   var followups = (a && a.followups) || [];
   var idx = -1;
@@ -76,7 +79,7 @@ export function DefendScreen(props) {
         props.goCand({ name: "done", id: a.id });
         setTimeout(function () { runGrading(props.ctxRef.current, a.id); }, 300); // OQ-45
       }
-    }, function () { saving.current = false; });
+    }, function () { saving.current = false; setToast(t("conn_error")); setTimeout(function () { setToast(""); }, 4000); });
   }
 
   useEffect(function () { if (current && current.shown_at && remaining <= 0) save(true); }, [remaining, current && current.shown_at]);
@@ -96,7 +99,7 @@ export function DefendScreen(props) {
       <div className="exam-cols single">
         ${!current ? html`<div className="panel panel-pad-lg center-msg">
           <div className="intro-head" style=${{ width: "100%" }}><h1 style=${{ fontFamily: "var(--font-display)", fontSize: "var(--step-3)" }}>${t("defend_title")}</h1><${Mascot} pose="think" h=${104} blob=${true} /></div>
-          ${failed ? html`<p className="error-text">${t("task_failed")}</p>` : html`<p className="row"><${Spinner} /> ${t("preparing_questions")}</p>`}
+          ${failed ? html`<div className="stack"><p className="error-text" role="alert">${t("task_failed")}</p><div><button className="btn btn-primary" onClick=${function () { generating.current = false; setRetryN(retryN + 1); }}>${t("try_again")}</button></div></div>` : html`<p className="row"><${Spinner} /> ${t("preparing_questions")}</p>`}
         </div>` : html`<section className="stack-lg" dir=${tl === "ar" ? "rtl" : "ltr"} lang=${tl}>
           <span className="label-caps">${t("defend_title")}</span>
           <p className="question-card" id="q-text">${current.text}</p>

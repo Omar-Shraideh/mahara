@@ -13,4 +13,4 @@ This app is finished and tested. Please do not redesign, rewrite, restructure it
 ## Structure
 - `server/` holds Express (API, live updates), the JSON-file database, and the grading service.
 - `shared/` holds scoring logic, the task blueprint, the scoring engine, and English and Arabic strings.
-- `src/` holds the React screens (htm templates) and `styles.css`, which is the approved design, unchanged.
+- `src/` holds the React screens (htm templates) and `styles.css`, which is the approved design. Keep it as it is.

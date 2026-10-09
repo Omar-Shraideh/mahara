@@ -116,7 +116,9 @@ ${errs.form ? html`<p className="error-text">${errs.form}</p>` : null}
           ${invites.map(function (iv) {
             var canStart = iv.status === "invited";
             var hasResult = !!iv.attempt_id;
-            return html`<tr key=${iv.id} className=${hasResult ? "clickable" : ""} onClick=${hasResult ? function () { props.go({ name: "result", id: iv.attempt_id }); } : null}>
+            var openRow = hasResult ? function () { props.go({ name: "result", id: iv.attempt_id }); } : null;
+            return html`<tr key=${iv.id} className=${hasResult ? "clickable" : ""} onClick=${openRow} tabIndex=${hasResult ? 0 : null}
+              onKeyDown=${hasResult ? function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openRow(); } } : null}>
               <td className="wrap">${iv.candidate_name} ${iv.is_demo ? html`<span className="chip demo">${t("demo_data")}</span>` : null}</td>
               <td><bdi>${iv.candidate_email}</bdi></td>
               <td className="wrap">${roleLabel(iv, lang, data.blueprints)}</td>

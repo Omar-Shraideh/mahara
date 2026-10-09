@@ -4,6 +4,7 @@ import { Mascot } from "../components/Mascot.js";
 import { Spinner } from "../components/Spinner.js";
 import { runGrading, viewedThisSession } from "../lib/grading.js";
 import { byId, fmtScore, newId, resolveBlueprint, roleLabel } from "../lib/helpers.js";
+import { useNow } from "../lib/hooks.js";
 
 export function summaryLine(t, lang, bp, finals, engine) {
   var list = bp.rubric.map(function (c) { return { c: c, s: finals[c.id] ? finals[c.id].score : 0 }; });
@@ -21,6 +22,7 @@ export function ResultPage(props) {
   var s4 = useState("summary"), tab = s4[0], setTab = s4[1];
   var s5 = useState(false), flagOpen = s5[0], setFlagOpen = s5[1];
   var loggedView = useRef(false);
+  var now = useNow(5000);
 
   useEffect(function () {
     if (a && !loggedView.current && !viewedThisSession[a.id]) {
@@ -49,7 +51,7 @@ export function ResultPage(props) {
     if (!flagText.trim()) { setFlagErr(t("flag_err")); return; }
     setFlagErr("");
     store.set("actions", newId("flag"), { attempt_id: a.id, action: "flag", comment: flagText.trim().slice(0, 1000), created_at: Date.now() })
-      .then(function () { setFlagText(""); setFlagMsg(t("flag_done")); });
+      .then(function () { setFlagText(""); setFlagMsg(t("flag_done")); }, function () { setFlagErr(t("conn_error")); });
   }
 
   var finals = {};
@@ -96,7 +98,10 @@ export function ResultPage(props) {
 
   if (a.status === "no_work") return html`<div className="stack-lg">${header}<div className="panel"><p>${t("no_work")}</p></div></div>`;
   if (!graded) {
-    var stateMsg = a.status === "grading" ? html`<p className="row"><${Spinner} /> ${t("grading_now")}</p>`
+    // Grading normally takes seconds; after 90s assume the server restarted and offer a retry.
+    var stuck = a.status === "grading" && now - (a.grading_started_at || 0) > 90000;
+    var stateMsg = stuck ? html`<div className="stack"><p>${t("grading_slow")}</p><div><button className="btn btn-primary" onClick=${function () { runGrading(props.ctx, a.id); }}>${t("retry_grading")}</button></div></div>`
+      : a.status === "grading" ? html`<p className="row"><${Spinner} /> ${t("grading_now")}</p>`
       : a.status === "grading_failed" ? html`<div className="stack"><p>${t("grading_failed")}</p><div><button className="btn btn-primary" onClick=${function () { runGrading(props.ctx, a.id); }}>${t("retry_grading")}</button></div></div>`
       : a.status === "defended" ? html`<div className="stack"><p>${t("not_graded_yet")}</p><div><button className="btn btn-primary" onClick=${function () { runGrading(props.ctx, a.id); }}>${t("grade_now")}</button></div></div>`
       : html`<p className="muted">${t("status_" + (iv.status || "in_progress"))}</p>`;

@@ -29,6 +29,14 @@ db.events.on("change", function (c, list) { broadcast("change", { c: c, list: li
 
 const ai = createAiService({ db: db, onStatus: function (st) { broadcast("ai", st); } });
 
+// Finish any grading that was cut off by a restart (Replit sleeps and restarts on its own).
+db.list("attempts").forEach(function (a) {
+  if (a.status === "defended" || a.status === "grading") {
+    console.log("[ai] Resuming grading for", a.id);
+    ai.gradeAttempt(a.id);
+  }
+});
+
 const app = express();
 app.disable("x-powered-by");
 app.use(express.json({ limit: "512kb" }));
@@ -91,9 +99,13 @@ app.put("/api/db/:c/:id", function (req, res) {
 
 app.patch("/api/db/:c/:id", function (req, res) {
   if (!checkTarget(req, res)) return;
-  var list = db.update(req.params.c, req.params.id, cleanDoc(req.body));
+  var patch = cleanDoc(req.body);
+  var list = db.update(req.params.c, req.params.id, patch);
   if (!list) return fail(res, 404, "invalid_argument", "That record no longer exists.");
   res.json({ ok: true, list: list });
+  // The server starts grading as soon as the defend answers are saved, so a closed tab
+  // or a slow device can never leave a finished session ungraded.
+  if (req.params.c === "attempts" && patch && patch.status === "defended") ai.gradeAttempt(req.params.id);
 });
 
 app.delete("/api/db/:c/:id", function (req, res) {

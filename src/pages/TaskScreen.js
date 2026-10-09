@@ -67,7 +67,8 @@ export function TaskScreen(props) {
     if (L.isEmptySubmission(fields)) {
       store.update("attempts", a.id, { fields: fields, submission: "", submitted_at: now2, telemetry: telemetry, status: "no_work" })
         .then(function () { return store.update("invites", a.invite_id, { status: "no_work" }); })
-        .then(function () { props.goCand({ name: "done", id: a.id, noWork: true }); });
+        .then(function () { props.goCand({ name: "done", id: a.id, noWork: true }); })
+        .catch(function () { submitted.current = false; setToast(t("conn_error")); });
       return;
     }
     var submission = L.buildSubmissionText(spec, fields);
