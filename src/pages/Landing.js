@@ -1,6 +1,7 @@
 import { html, useState, useEffect, useRef, B, L } from "../lib/core.js";
 import { LevelBadge } from "../components/LevelBadge.js";
 import { Mascot } from "../components/Mascot.js";
+import { SquaresBackground } from "../components/SquaresBackground.js";
 
 // Landing: two lines and a button on one side, a chat-style scoring demo on the other.
 // The visitor taps one of three sample replies (the blueprint's hand-graded examples) and
@@ -75,6 +76,7 @@ export function Landing(props) {
   var avatar = html`<span className="chat-avatar" aria-hidden="true"><${Mascot} pose="cheer" h=${64} /></span>`;
 
   return html`<main className="landing">
+    <${SquaresBackground} />
     <section className="landing-split">
       <div className="hero">
         <${Headline} text=${t("landing_title")} />

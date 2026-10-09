@@ -454,6 +454,10 @@ table.data th.num { text-align: end; }
   .chat-body { gap: 8px; padding-block: 10px; }
 }
 @media (prefers-reduced-motion: reduce) { .typing i { animation: none; opacity: .6; } .chip-btn { transition: none; } }
+/* animated squares background (landing only) */
+.squares-bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: block; }
+.landing { position: relative; }
+.landing-split { position: relative; z-index: 1; }
 /* landing motion (from Superdesign library ideas: staggered headline, hand-drawn underline, data fill) */
 .hl-word { display: inline-block; animation: hl-rise .6s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes hl-rise { from { opacity: 0; transform: translateY(0.45em); } to { opacity: 1; transform: none; } }
