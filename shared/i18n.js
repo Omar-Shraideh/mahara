@@ -69,7 +69,7 @@ var S = {
 
     // landing
     landing_kicker: "Entry-level hiring, work first",
-    landing_title: "See what every applicant can do before you read a CV.",
+    landing_title: "See what every applicant [can do] before you read a CV.",
     landing_body: "Invite each applicant to a 10-minute task at your office. They do real work for the role, answer two questions about it, and you get a level and scores by skill with the reason for each.",
     landing_cta: "Open employer workspace",
     landing_candidate: "Taking a task today? Start here",
@@ -340,7 +340,7 @@ var S = {
     ai_mode_mock: "اتصال الذكاء الاصطناعي لا يعمل الآن، لذا يتولى محرك تقييم مهارة التقييم",
 
     landing_kicker: "التوظيف للمستويات المبتدئة، العمل أولاً",
-    landing_title: "اعرف ما يستطيع كل متقدم فعله قبل أن تقرأ سيرته الذاتية.",
+    landing_title: "اعرف ما يستطيع كل متقدم [فعله] قبل أن تقرأ سيرته الذاتية.",
     landing_body: "ادعُ كل متقدم إلى مهمة مدتها 10 دقائق في مكتبك. يؤدي عملاً حقيقياً للوظيفة، ويجيب عن سؤالين حوله، وتحصل على مستوى ودرجات لكل مهارة مع سبب كل درجة.",
     landing_cta: "افتح مساحة صاحب العمل",
     landing_candidate: "لديك مهمة اليوم؟ ابدأ من هنا",

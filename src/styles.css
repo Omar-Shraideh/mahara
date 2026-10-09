@@ -454,6 +454,25 @@ table.data th.num { text-align: end; }
   .chat-body { gap: 8px; padding-block: 10px; }
 }
 @media (prefers-reduced-motion: reduce) { .typing i { animation: none; opacity: .6; } .chip-btn { transition: none; } }
+/* landing motion (from Superdesign library ideas: staggered headline, hand-drawn underline, data fill) */
+.hl-word { display: inline-block; animation: hl-rise .6s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes hl-rise { from { opacity: 0; transform: translateY(0.45em); } to { opacity: 1; transform: none; } }
+.hl-key { position: relative; white-space: nowrap; z-index: 0; }
+.hl-underline { position: absolute; left: -4%; right: auto; bottom: -0.12em; width: 108%; height: 0.36em; overflow: visible; z-index: -1; }
+.hl-underline path { fill: none; stroke: var(--gold); stroke-width: 4.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: hl-draw .8s cubic-bezier(.65,0,.35,1) .75s forwards; }
+html[dir="rtl"] .hl-underline { transform: scaleX(-1); }
+@keyframes hl-draw { to { stroke-dashoffset: 0; } }
+.rc-bar > span { transform-origin: left center; animation: rc-fill .7s cubic-bezier(.2,.8,.2,1) both; }
+html[dir="rtl"] .rc-bar > span { transform-origin: right center; }
+@keyframes rc-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.rc-evidence mark { background: linear-gradient(var(--gold-swipe), var(--gold-swipe)) no-repeat left center / 100% 100%; animation: rc-sweep .7s cubic-bezier(.65,0,.35,1) .45s both; }
+@keyframes rc-sweep { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+.result-card { animation: rc-in .35s ease-out both; }
+@keyframes rc-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .hl-word, .rc-bar > span, .rc-evidence mark, .result-card { animation: none; }
+  .hl-underline path { animation: none; stroke-dashoffset: 0; }
+}
 @media (max-width: 480px) { .chat-body, .chat-head, .chat-foot { padding-inline: 12px; } .msg .chat-avatar { display: none; } .rc-row { grid-template-columns: minmax(0, 1fr) 44px auto; } }
 .how { margin: 0; padding: 0; display: grid; counter-reset: step; }
 .how li { list-style: none; display: grid; grid-template-columns: 32px 1fr; gap: 10px; padding-block: 10px; border-block-end: 1px solid var(--line); }

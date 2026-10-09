@@ -30,6 +30,29 @@ function resultFor(ex) {
   return { criteria: criteria, level: level, weakest: weakest, evidence: evidence };
 }
 
+// Headline: each word rises in with a short stagger; the [bracketed] phrase gets a
+// hand-drawn highlighter underline that draws itself after the words land.
+function Headline(props) {
+  var parts = String(props.text).split(/(\[[^\]]+\])/);
+  var i = 0;
+  var out = [];
+  parts.forEach(function (part, p) {
+    if (!part) return;
+    if (part.charAt(0) === "[") {
+      var phrase = part.slice(1, -1);
+      out.push(html`<span key=${"k" + p} className="hl-word hl-key" style=${{ animationDelay: (i++ * 55) + "ms" }}>${phrase}<svg className="hl-underline" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 9.5 C 38 4.5, 82 3.2, 122 5.6 S 182 9.8, 197 5"></path></svg></span>`);
+      out.push(" ");
+      return;
+    }
+    part.split(/\s+/).forEach(function (w, j) {
+      if (!w) return;
+      out.push(html`<span key=${"w" + p + "-" + j} className="hl-word" style=${{ animationDelay: (i++ * 55) + "ms" }}>${w}</span>`);
+      out.push(" ");
+    });
+  });
+  return html`<h1 aria-label=${props.text.replace(/[\[\]]/g, "")}><span aria-hidden="true">${out}</span></h1>`;
+}
+
 export function Landing(props) {
   var t = props.t, lang = props.lang;
   var s1 = useState("B"), pick = s1[0], setPick = s1[1];
@@ -54,7 +77,7 @@ export function Landing(props) {
   return html`<main className="landing">
     <section className="landing-split">
       <div className="hero">
-        <h1>${t("landing_title")}</h1>
+        <${Headline} text=${t("landing_title")} />
         <p className="lede">${t("landing_sub")}</p>
         <div className="row"><button className="btn btn-primary btn-lg" onClick=${props.openEmployer}>${t("landing_cta")}</button></div>
       </div>
@@ -82,16 +105,16 @@ export function Landing(props) {
             : html`<div className="msg bot" aria-live="polite">
                 ${avatar}
                 <div className="bot-stack">
-                  <div className="result-card">
+                  <div className="result-card" key=${opt.key}>
                     <div className="result-card-head">
                       <span>${t("chat_card", { x: opt.key })}</span>
                       <${LevelBadge} t=${t} level=${r.level} />
                     </div>
-                    ${r.criteria.map(function (c) {
+                    ${r.criteria.map(function (c, idx) {
                       var weak = c.id === r.weakest.id;
                       return html`<div className=${"rc-row" + (weak ? " weak" : "")} key=${c.id}>
                         <span className="rc-name">${skill(c.id)}${weak ? html` <span className="rc-tag">${t("chat_weakest")}</span>` : null}</span>
-                        <span className="rc-bar" aria-hidden="true"><span style=${{ width: (c.score / 4 * 100) + "%" }}></span></span>
+                        <span className="rc-bar" aria-hidden="true"><span style=${{ width: (c.score / 4 * 100) + "%", animationDelay: (idx * 70) + "ms" }}></span></span>
                         <bdi className="rc-val">${c.score} / 4</bdi>
                       </div>`;
                     })}
