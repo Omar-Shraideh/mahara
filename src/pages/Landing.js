@@ -82,15 +82,15 @@ export function Landing(props) {
             : html`<div className="msg bot" aria-live="polite">
                 ${avatar}
                 <div className="bot-stack">
-                  <p className="bubble">${t("chat_done", { x: opt.key, skill: skill(r.weakest.id) })}</p>
                   <div className="result-card">
                     <div className="result-card-head">
                       <span>${t("chat_card", { x: opt.key })}</span>
                       <${LevelBadge} t=${t} level=${r.level} />
                     </div>
                     ${r.criteria.map(function (c) {
-                      return html`<div className="rc-row" key=${c.id}>
-                        <span className="rc-name">${skill(c.id)}</span>
+                      var weak = c.id === r.weakest.id;
+                      return html`<div className=${"rc-row" + (weak ? " weak" : "")} key=${c.id}>
+                        <span className="rc-name">${skill(c.id)}${weak ? html` <span className="rc-tag">${t("chat_weakest")}</span>` : null}</span>
                         <span className="rc-bar" aria-hidden="true"><span style=${{ width: (c.score / 4 * 100) + "%" }}></span></span>
                         <bdi className="rc-val">${c.score} / 4</bdi>
                       </div>`;
@@ -102,7 +102,6 @@ export function Landing(props) {
         </div>
 
         <footer className="chat-foot">
-          <span className="label-caps">${t("chat_try")} ↓</span>
           <div className="chat-chips">
             ${OPTIONS.map(function (o) {
               return html`<button key=${o.key} type="button" className="chip-btn" aria-pressed=${pick === o.key} onClick=${function () { choose(o.key); }}>${t("chat_ask", { x: o.key })}</button>`;
