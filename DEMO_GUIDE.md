@@ -20,7 +20,7 @@
 ## 0:30–1:30 — First interaction: invite an applicant
 
 1. Click **Open employer workspace**.
-2. **Say:** "This is the employer's workspace. Six applicants have already been through it."
+2. **Say:** "This is the employer's workspace. Three applicants have already been through it."
 3. In **Invite an applicant**, type a name (for example `Rania Saleh`) and an email (`rania.saleh@example.com`). Click **Invite applicant**.
 4. The confirmation appears with the mascot's thumbs-up. **Say:** "No email needed: the applicant sits at our office device."
 5. Click **Start test** in that confirmation.
