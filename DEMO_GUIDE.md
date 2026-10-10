@@ -50,7 +50,7 @@
 3. Open the result. **Show:** the level badge, **Scores by skill** with a reason for each, ownership, time used, tab switches and blocked pastes.
 4. Click the **Work** tab. **Say:** "Every score points to the exact words in their answer."
 5. Click **Shortlist**.
-6. Go back to **All results**. Set **Minimum level → Strong** to filter, and **Task language → Arabic** to show **Noor Abbadi**'s Arabic result.
+6. Go back to **All results**. Set **Minimum level → Strong** to filter. If your applicant worked in Arabic, set **Task language → Arabic** to show their result alone.
 7. Click **عربي** in the top bar. The whole product flips to Arabic, right to left. **Close with:** "Same rubric, same fairness, in the language the applicant chose."
 
 ---
@@ -62,9 +62,8 @@ Use this if anything goes wrong live (slow Wi-Fi or a typing mistake):
 - **No internet at the venue:** it doesn't matter for scoring. Mahara grades on its own server, with no outside service involved.
 - **You don't want to type live:** skip the test. Open **Results** and walk through the ready-made reports:
   - **Omar Khalil**: Strong, English, shortlisted.
-  - **Noor Abbadi**: Strong, Arabic.
   - **Lina Haddad**: Job-ready. Use her to show the gap: "polite but generic".
   - **Yazan Odeh**: Emerging. He blamed the courier, and a reviewer left a "Disagree with score" note.
-- **Need a fresh test without creating an invite:** on **Invites**, click **Start test** next to **Dana Majali**.
+- **Need a fresh test quickly:** on **Invites**, fill in any name and email, click **Invite applicant**, then **Start test**.
 - **Page looks stuck:** refresh. Every page has its own address and comes back to the same step, including the middle of a test (answers autosave every 10 seconds).
 - **Everything is a mess after rehearsal:** in the Replit **Shell**, run `npm run reset-demo` and refresh.

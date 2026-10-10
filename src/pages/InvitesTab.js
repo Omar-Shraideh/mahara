@@ -93,6 +93,9 @@ export function InvitesTab(props) {
               <span className="t">${B.ROLES[k][lang]}</span><span className="s">${t("role_verified_hint")}</span>
             </button>`;
           })}
+          <div className="role-opt custom" aria-disabled="true" title=${t("role_custom_soon")}>
+            <span className="t">${t("role_custom_new")} <span className="chip soon">${t("role_custom_soon")}</span></span><span className="s">${t("role_custom_hint")}</span>
+          </div>
         </div>
         ${errs.role ? html`<span className="error-text">${errs.role}</span>` : null}
       </div>

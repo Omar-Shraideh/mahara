@@ -16,7 +16,6 @@ export function WorkTop(props) {
         })}
       </nav>
       <${ModeSwitch} t=${t} mode="employer" showLabel=${false} toEmployer=${function () {}} toCandidate=${props.toCandidate} />
-      <span className="proto-pill">${t("prototype")}</span>
       <button className="lang-btn" onClick=${props.toggleLang} lang=${props.lang === "ar" ? "en" : "ar"}>${t("lang_toggle")}</button>
     </div>
     ${props.aiMode === "mock" ? html`<p className="ai-note">${t("ai_mode_mock")}</p>` : null}

@@ -223,7 +223,10 @@ html[dir="rtl"] .rail-col svg { transform: scaleX(-1); }
 .role-opt[aria-pressed="true"] { background: var(--panel); border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
 .role-opt .t { font-weight: 500; }
 .role-opt .s { font-size: 0.75rem; color: var(--muted); }
-.role-opt.custom { border-style: dashed; }
+.role-opt.custom { border-style: dashed !important; background: var(--panel-2); cursor: default; }
+.role-opt.custom:hover { transform: none; box-shadow: var(--neo-shadow-sm) !important; }
+.role-opt.custom .t { color: var(--muted); }
+.role-opt.custom .chip.soon { margin-inline-start: 6px; font-size: 0.6875rem; padding: 0 7px; vertical-align: 1px; background: var(--gold-soft); color: var(--ink); }
 
 /* ---------- tabs ---------- */
 .tabs { display: flex; gap: 4px; border-block-end: 1px solid var(--line); flex-wrap: wrap; }

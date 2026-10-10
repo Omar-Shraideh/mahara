@@ -17,47 +17,6 @@ function makeTask(lang, orderId) {
   return { variables: vars, task_text: L.fillTemplate(tpl, vars), deliverable: DELIVERABLE[lang], ai_mode: "seed", facts: vars.facts };
 }
 
-// Two extra hand-written samples (fictional) so the results list shows a realistic spread.
-var EXTRA = {
-  hala: {
-    lang: "en",
-    fields: {
-      reply: "Hi Rana,\nI'm really sorry about the wait on order {order}. I checked and the courier tried to deliver it on 4 October but couldn't reach you, so it's now at our depot. We'll arrange another delivery soon and I'll keep you updated.\nThanks for your patience,\nHala",
-      note: "{order} delivery attempt failed on 4 Oct, customer unreachable. Please rebook."
-    },
-    followups: [
-      { q: "Why did you mention the courier's attempt in your reply?", a: "Because the record shows they came on the 4th, so I wanted her to know the parcel isn't lost and it's at the depot, without saying it was her fault." },
-      { q: "What would you change if the customer said she was home all day on the 4th?", a: "I'd apologise again, believe her, and ask the depot to check with the driver. I'd also offer to deliver at a time she chooses." }
-    ],
-    scores: {
-      empathy: [3, "Apologises for the wait on this specific order, but does not acknowledge why it matters to her.", "I'm really sorry about the wait on order {order}"],
-      resolution: [2, "Promises another delivery but gives no date or time the customer can plan around.", "We'll arrange another delivery soon"],
-      accuracy: [4, "Uses the attempted delivery and the depot from the order facts.", "the courier tried to deliver it on 4 October but couldn't reach you"],
-      clarity: [4, "Short and easy to follow.", ""],
-      escalation: [3, "The note names the failed attempt but not which team should rebook.", "delivery attempt failed on 4 Oct, customer unreachable"]
-    },
-    ownership: 3
-  },
-  sara: {
-    lang: "ar",
-    fields: {
-      reply: "مرحباً،\nنعتذر عن تأخر طلبك {order}. حسب سجل التوصيل، حاول السائق تسليم الطلب يوم 4 تشرين الأول ولم يتمكن من الوصول إليك. سنتواصل معك قريباً لتحديد موعد جديد.\nشكراً لتفهمك",
-      note: "الطلب {order} لم يُسلَّم بسبب عدم الرد. يرجى المتابعة."
-    },
-    followups: [
-      { q: "لماذا لم تحدد موعداً جديداً للتوصيل في ردّك؟", a: "ما كنت متأكدة من الموعد المتاح، فما حبيت أوعد بشي ما بقدر ألتزم فيه." },
-      { q: "ماذا ستفعل لو اتصلت العميلة وقالت إنها تحتاج الطلب اليوم؟", a: "بحكي مع المستودع إذا في سائق متاح اليوم، وإذا لا بعرض عليها تستلمه بنفسها من المستودع." }
-    ],
-    scores: {
-      empathy: [2, "اعتذار مهذب لكنه لا يعترف بانزعاج العميلة تحديداً.", "نعتذر عن تأخر طلبك {order}"],
-      resolution: [2, "يعد بالتواصل قريباً دون موعد أو خطوة محددة.", "سنتواصل معك قريباً لتحديد موعد جديد"],
-      accuracy: [4, "يذكر محاولة التسليم الواردة في سجل التوصيل بشكل صحيح.", "حاول السائق تسليم الطلب يوم 4 تشرين الأول"],
-      clarity: [4, "رد قصير وواضح.", ""],
-      escalation: [2, "الملاحظة تذكر المشكلة لكن لا تحدد الفريق المسؤول.", "يرجى المتابعة"]
-    },
-    ownership: 2
-  }
-};
 
 function sub(s, order) { return String(s).split("{order}").join(order); }
 
@@ -78,9 +37,6 @@ export function buildDemoData(now) {
   var ex = bp.graded_examples;
   var people = [
     { key: "omar", name: "Omar Khalil", email: "omar.khalil@example.com", order: "ZH-48213", sample: fromExample(ex[0], "ZH-48213"), ago: 2 * DAY + 3 * HOUR, used: 412, tabs: 0, pastes: 0, shortlist: true },
-    { key: "noor", name: "Noor Abbadi", email: "noor.abbadi@example.com", order: "ZH-48245", sample: fromExample(bp.demo_ar, "ZH-48245"), ago: 1 * DAY + 5 * HOUR, used: 455, tabs: 0, pastes: 1, shortlist: true },
-    { key: "hala", name: "Hala Saleh", email: "hala.saleh@example.com", order: "ZH-48377", sample: fromExample(EXTRA.hala, "ZH-48377"), ago: 1 * DAY + 1 * HOUR, used: 388, tabs: 1, pastes: 0 },
-    { key: "sara", name: "Sara Nasser", email: "sara.nasser@example.com", order: "ZH-48502", sample: fromExample(EXTRA.sara, "ZH-48502"), ago: 20 * HOUR, used: 301, tabs: 0, pastes: 0 },
     { key: "lina", name: "Lina Haddad", email: "lina.haddad@example.com", order: "ZH-48318", sample: fromExample(ex[1], "ZH-48318"), ago: 6 * HOUR, used: 236, tabs: 2, pastes: 2 },
     { key: "yazan", name: "Yazan Odeh", email: "yazan.odeh@example.com", order: "ZH-48466", sample: fromExample(ex[2], "ZH-48466"), ago: 3 * HOUR, used: 147, tabs: 0, pastes: 3, flag: "The candidate was very nervous at the start. Worth a second look before deciding." }
   ];
@@ -130,9 +86,5 @@ export function buildDemoData(now) {
     if (p.flag) out.actions["flag_demo" + (i + 1)] = { attempt_id: attId, action: "flag", comment: p.flag, created_at: gradedAt + 15 * 60000 };
   });
 
-  // Upcoming and cancelled invites, so the Invites tab shows a working pipeline.
-  out.invites.inv_demo7 = { candidate_name: "Dana Majali", candidate_email: "dana.majali@example.com", role: "customer_support", kind: "verified", session_code: code(), status: "invited", attempt_id: null, created_at: now - 40 * 60000, is_demo: true };
-  out.invites.inv_demo8 = { candidate_name: "Tariq Hijazi", candidate_email: "tariq.hijazi@example.com", role: "customer_support", kind: "verified", session_code: code(), status: "invited", attempt_id: null, created_at: now - 26 * HOUR, is_demo: true };
-  out.invites.inv_demo9 = { candidate_name: "Rawan Qudah", candidate_email: "rawan.qudah@example.com", role: "customer_support", kind: "verified", session_code: code(), status: "cancelled", attempt_id: null, created_at: now - 3 * DAY, cancelled_at: now - 2 * DAY, is_demo: true };
   return out;
 }

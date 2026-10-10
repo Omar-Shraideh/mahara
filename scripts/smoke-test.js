@@ -28,7 +28,7 @@ try {
   const health = (await call("GET", "/api/health")).json;
   console.log("  AI mode: " + health.ai.mode + (health.ai.mode === "claude" ? "" : " (built-in rules)"));
   const data = (await call("GET", "/api/data")).json.data;
-  check(data.attempts.length >= 6, "demo results are seeded (" + data.attempts.length + ")");
+  check(data.attempts.length >= 3, "demo results are seeded (" + data.attempts.length + ")");
   const page = await fetch(BASE + "/workspace/results/att_demo1");
   check(page.status === 200 && (await page.text()).includes('id="app"'), "deep links load the app");
   check((await call("PUT", "/api/db/invites/inv_bad", { candidate_name: "", candidate_email: "x", role: "customer_support" })).status === 400, "invalid invite is rejected");
