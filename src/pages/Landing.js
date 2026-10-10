@@ -94,7 +94,6 @@ export function Landing(props) {
             <strong>${t("chat_name")}</strong>
             <span className="chat-status"><span className="chat-dot" aria-hidden="true"></span>${t("chat_status")}</span>
           </div>
-          <span className="chat-pill">${t("chat_pill")}</span>
         </header>
 
         <div className="chat-body">
